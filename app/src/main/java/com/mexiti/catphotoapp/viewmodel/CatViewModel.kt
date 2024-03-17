@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface CatUiState{
-    data class Success(val photos:CatPhoto) : CatUiState
+    data class Success(val photos:List<CatPhoto>) : CatUiState
     object Error: CatUiState
     object Loading: CatUiState
 }
@@ -27,7 +27,7 @@ class CatViewModel:ViewModel(){
          viewModelScope.launch {
             catUiState = try {
                  val listResult = CatApi.retrofitService.getPhotos()
-                CatUiState.Success(listResult[0])
+                CatUiState.Success(listResult)
              } catch (e: IOException){
                  CatUiState.Error
              }
